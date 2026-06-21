@@ -1,0 +1,16 @@
+services:
+  db:
+    image: mariadb:11
+    container_name: fastapi-db
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: "1123"
+      MARIADB_DATABASE: "DATA"
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./db-init:/docker-entrypoint-initdb.d
+
+volumes:
+  db_data:
