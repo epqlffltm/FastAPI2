@@ -3,7 +3,7 @@
 from sqlalchemy import select, delete
 from sqlalchemy.orm import Session
 from fastapi import Depends
-from database.orm import Data
+from database.orm import Data, User
 from database.connection import get_db
 from typing import List
 
@@ -32,3 +32,13 @@ class DataRepository:
     def delete_data(self, id: int) -> None:
         self.session.execute(delete(Data).where(Data.id == id))
         self.session.commit()
+        
+class UserRepository:
+    def __init__ (self, session: Session = Depends(get_db)):
+        self.session = session
+        
+    def save_user(self, user:User) -> User:
+        self.session.add(user)
+        self.session.commit()
+        self.session.refresh(user)
+        return user

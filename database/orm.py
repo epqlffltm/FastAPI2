@@ -38,4 +38,8 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String(256), nullable=False)
     password = Column(String(256), nullable=False)
-    datas = relationship("data",lazy="joined")
+    datas = relationship("Data",lazy="joined")
+    
+    @classmethod
+    def create(cls, username: str, hashed_password: str) -> "User":
+        return cls(username = username, password=hashed_password,)

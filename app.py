@@ -2,11 +2,13 @@
 
 from fastapi import FastAPI
 import uvicorn
-from api import router, user
+from api.router import router as data_router
+from api.user import router as user_router
+
 
 app = FastAPI()
-app.include_router(router)
-app.include_router(user)
+app.include_router(data_router)
+app.include_router(user_router)
 
 @app.get('/')
 async def index():

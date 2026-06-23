@@ -12,3 +12,9 @@ class DataSchema(BaseModel):
     
 class ListDataResponse(BaseModel):
     data:List[DataSchema]
+    
+class UserSchema(BaseModel):
+    id: int
+    username: str
+    
+    model_config = ConfigDict(from_attributes=True)
