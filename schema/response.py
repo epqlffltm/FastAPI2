@@ -18,3 +18,7 @@ class UserSchema(BaseModel):
     username: str
     
     model_config = ConfigDict(from_attributes=True)
+    
+class JWTResponse(BaseModel):
+    access_token: str
+    
