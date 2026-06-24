@@ -4,14 +4,26 @@ from fastapi import APIRouter, Body, HTTPException, Depends
 import random
 from typing import List
 from database.orm import Data
-from database.repository import DataRepository
 from schema.request import CreateRequest
 from schema.response import DataSchema
+from security import get_access_token
+from service.user import UserService
+from database.repository import DataRepository, UserRepository
 
 router = APIRouter()
 
 @router.get("/data", status_code=200)
-async def get_datas(order: str | None = None, data_repo: DataRepository = Depends()):
+async def get_datas(
+    order: str | None = None, data_repo: DataRepository = Depends(),
+    access_token: str = Depends(get_access_token),
+    user_service: UserService= Depends(),
+    user_repo: UserRepository = Depends(),
+    ):
+    username: str = user_service.decode_jwt(access_token=access_token)
+    user: User | None = user_repo.get_user_by_username(username=username)
+    if not user:
+        raise HTTPException(status_code = 404, detail="user not found")
+        
     data: List[Data] = data_repo.get_all_data()
     if order is None:
         return data
